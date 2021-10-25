@@ -1,3 +1,4 @@
+import { Vector3 } from "@react-three/fiber";
 import React, { FunctionComponent } from "react";
 
 import AbstractOribitingEntity from "./AbstractOrbitingEntityController";
@@ -19,7 +20,15 @@ export default class PlanetController
     this.ownedBy = input.ownedBy;
   }
 
-  renderVisualization: FunctionComponent = () => {
-    return <li>Planet: {this.name}</li>;
+  public renderVisualization: FunctionComponent<{ position: Vector3 }> = ({
+    position,
+  }) => {
+    console.log(this.name, position, this.radius * 100);
+    return (
+      <mesh scale={this.radius * 1000} position={position}>
+        <sphereGeometry args={[1]} />
+        <meshStandardMaterial color={"red"} />
+      </mesh>
+    );
   };
 }

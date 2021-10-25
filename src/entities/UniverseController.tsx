@@ -1,5 +1,7 @@
+import { Canvas } from "@react-three/fiber";
 import React, { FunctionComponent } from "react";
 
+import CameraControls from "../util/CameraControls";
 import AbstractEntityController from "./AbstractEntityController";
 import {
   excludeMethods,
@@ -22,15 +24,14 @@ export default class UniverseController
 
   public render: FunctionComponent = () => {
     return (
-      <>
-        <p>Universe: {this.name}</p>
-        <ul>
-          {this.entities.map((entity) => {
-            const EntityComponent = entity.render;
-            return <EntityComponent key={entity.id} />;
-          })}
-        </ul>
-      </>
+      <Canvas style={{ backgroundColor: "black" }}>
+        <CameraControls />
+        <ambientLight intensity={0.5} />
+        {this.entities.map((entity) => {
+          const EntityComponent = entity.render;
+          return <EntityComponent key={entity.id} />;
+        })}
+      </Canvas>
     );
   };
 }

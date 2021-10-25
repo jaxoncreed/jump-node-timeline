@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 import AbstractOribitingEntity from "./AbstractOrbitingEntityController";
 import { excludeMethods, JumpNode } from "./entityTypes";
@@ -20,6 +20,6 @@ export default class JumpNodeController
   }
 
   renderVisualization: FunctionComponent = () => {
-    return <li>JumpNode: {this.name}</li>;
+    return null;
   };
 }

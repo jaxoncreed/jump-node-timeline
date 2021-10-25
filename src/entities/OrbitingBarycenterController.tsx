@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 import AbstractOribitingEntity from "./AbstractOrbitingEntityController";
 import { OrbitingBarycenter } from "./entityTypes";
@@ -8,8 +8,9 @@ export default class OrbitingBarycenterController
   implements OrbitingBarycenter
 {
   public type: "OrbitingBarycenter" = "OrbitingBarycenter";
+  public mass: 0 = 0;
 
   renderVisualization: FunctionComponent = () => {
-    return <li>OrbitingBarycenter: {this.name}</li>;
+    return null;
   };
 }

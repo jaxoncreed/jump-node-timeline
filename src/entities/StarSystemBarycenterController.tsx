@@ -1,4 +1,5 @@
-import React, { FunctionComponent } from "react";
+import { Vector3 } from "@react-three/fiber";
+import { FunctionComponent } from "react";
 
 import AbstractOrbitableEntityController from "./AbstractOrbitableEntityController";
 import {
@@ -12,7 +13,7 @@ export default class StarSystemBarycenterController
   extends AbstractOrbitableEntityController<Star>
   implements StarSystemBarycenter
 {
-  position: number[];
+  position: Vector3;
   ownedBy: PoliticalEntity[];
   public type: "StarSystemBarycenter" = "StarSystemBarycenter";
 
@@ -23,6 +24,6 @@ export default class StarSystemBarycenterController
   }
 
   renderSelf: FunctionComponent = () => {
-    return <li>StarSystemBarycenter: {this.name}</li>;
+    return null;
   };
 }

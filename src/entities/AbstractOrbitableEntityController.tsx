@@ -25,13 +25,13 @@ export default abstract class AbstractOrbitableEntityController<
   public render: FunctionComponent = () => {
     const RenderSelfComponent = this.renderSelf;
     return (
-      <ul>
+      <>
         <RenderSelfComponent />
         {this.orbitedBy.map((orbitingBody) => {
           const Component = orbitingBody.render;
           return <Component key={orbitingBody.id} />;
         })}
-      </ul>
+      </>
     );
   };
 }

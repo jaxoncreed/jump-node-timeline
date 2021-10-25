@@ -2,6 +2,7 @@
  * General Items
  */
 
+import { Vector3 } from "@react-three/fiber";
 import { FunctionComponent } from "react";
 
 export interface Entity {
@@ -16,7 +17,7 @@ export interface StationaryEntity<
   OrbitedBy extends OrbitingEntity = OrbitingEntity
 > extends Entity,
     OrbitableEntity<OrbitedBy> {
-  position: number[];
+  position: Vector3;
 }
 
 export interface OrbitableEntity<
@@ -28,12 +29,20 @@ export interface OrbitableEntity<
 
 export interface OrbitingEntity extends Entity, OrbitableEntity {
   orbiting: OrbitableEntity;
-  renderVisualization: FunctionComponent;
+  renderVisualization: FunctionComponent<{ position: Vector3 }>;
+  keplerianElements: {
+    semimajorAxis: number;
+    eccentricity: number;
+    inclination: number;
+    longitudeOfAscendingNode: number;
+    argumentOfPeriapsis: number;
+    meanAnomalyAtEpoch: number;
+  };
+  mass: number;
 }
 
 export interface SphericalBody {
   radius: number;
-  mass: number;
 }
 
 export interface Ownable {
@@ -68,6 +77,7 @@ export interface Planet extends OrbitingEntity, SphericalBody, Ownable {
 
 export interface OrbitingBarycenter extends OrbitingEntity {
   type: "OrbitingBarycenter";
+  mass: 0;
 }
 
 export interface JumpNode extends OrbitingEntity, SphericalBody {

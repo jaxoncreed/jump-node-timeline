@@ -50,8 +50,16 @@ const sun = new StarController({
   color: "yellow",
   orbiting: sol,
   orbitedBy: [],
-  radius: 696340,
-  mass: 1.989 * Math.pow(10, 30),
+  radius: 0.00465,
+  mass: 1.989e30,
+  keplerianElements: {
+    semimajorAxis: 0.00000001,
+    eccentricity: 0,
+    inclination: 0,
+    longitudeOfAscendingNode: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomalyAtEpoch: 0,
+  },
 });
 sol.addOrbitingBodies(sun);
 
@@ -59,11 +67,19 @@ const mercury = new PlanetController({
   id: "p1",
   name: "Mercury",
   description: "",
-  radius: 2439,
-  mass: 3.285 * Math.pow(10, 23),
+  radius: 1.63e-5,
+  mass: 3.285e23,
   orbitedBy: [],
   orbiting: sun,
   ownedBy: [],
+  keplerianElements: {
+    semimajorAxis: 0.3816,
+    eccentricity: 0.2056,
+    inclination: 3.38,
+    longitudeOfAscendingNode: 48.331,
+    argumentOfPeriapsis: 29.124,
+    meanAnomalyAtEpoch: 174.796,
+  },
 });
 sun.addOrbitingBodies(mercury);
 
@@ -71,11 +87,19 @@ const venus = new PlanetController({
   id: "p2",
   name: "Venus",
   description: "",
-  radius: 6051,
-  mass: 4.867 * Math.pow(10, 24),
+  radius: 4.04e-5,
+  mass: 4.867e24,
   orbitedBy: [],
   orbiting: sun,
   ownedBy: [],
+  keplerianElements: {
+    semimajorAxis: 0.723,
+    eccentricity: 0.006772,
+    inclination: 3.86,
+    longitudeOfAscendingNode: 76.68,
+    argumentOfPeriapsis: 54.884,
+    meanAnomalyAtEpoch: 50.115,
+  },
 });
 sun.addOrbitingBodies(venus);
 
@@ -83,22 +107,38 @@ const earth = new PlanetController({
   id: "p3",
   name: "Earth",
   description: "",
-  radius: 6371,
-  mass: 5.972 * Math.pow(10, 24),
+  radius: 4.26e-5,
+  mass: 5.972e24,
   orbitedBy: [],
   orbiting: sun,
   ownedBy: [un],
+  keplerianElements: {
+    semimajorAxis: 1,
+    eccentricity: 0.0167086,
+    inclination: 7.155,
+    longitudeOfAscendingNode: -11.26064,
+    argumentOfPeriapsis: 114.208,
+    meanAnomalyAtEpoch: 358.617,
+  },
 });
 sun.addOrbitingBodies(earth);
 const luna = new PlanetController({
   id: "p3-1",
   name: "Luna",
   description: "",
-  radius: 1737,
+  radius: 1.16e-5,
   mass: 7.347 * Math.pow(10, 22),
   orbitedBy: [],
   orbiting: earth,
   ownedBy: [un],
+  keplerianElements: {
+    semimajorAxis: 2.57e-3,
+    eccentricity: 0.0549,
+    inclination: 5.145,
+    longitudeOfAscendingNode: 28.6,
+    argumentOfPeriapsis: 318.15,
+    meanAnomalyAtEpoch: 0,
+  },
 });
 earth.addOrbitingBodies(luna);
 
@@ -106,11 +146,19 @@ const mars = new PlanetController({
   id: "p4",
   name: "Mars",
   description: "",
-  radius: 3389,
+  radius: 2.27e-5,
   mass: 6.39 * Math.pow(10, 23),
   orbitedBy: [],
   orbiting: sun,
   ownedBy: [mcr],
+  keplerianElements: {
+    semimajorAxis: 1.52,
+    eccentricity: 0.0934,
+    inclination: 5.65,
+    longitudeOfAscendingNode: 49.558,
+    argumentOfPeriapsis: 286.502,
+    meanAnomalyAtEpoch: 19.412,
+  },
 });
 sun.addOrbitingBodies(mars);
 const marsMoons = new OrbitingBarycenterController({
@@ -119,6 +167,15 @@ const marsMoons = new OrbitingBarycenterController({
   description: "",
   orbitedBy: [],
   orbiting: mars,
+  keplerianElements: {
+    semimajorAxis: 2e-3,
+    eccentricity: 0,
+    inclination: 0,
+    longitudeOfAscendingNode: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomalyAtEpoch: 0,
+  },
+  mass: 0,
 });
 mars.addOrbitingBodies(marsMoons);
 const phobos = new PlanetController({
@@ -126,20 +183,36 @@ const phobos = new PlanetController({
   name: "Phobos",
   description: "",
   radius: 11,
-  mass: 10.6 * Math.pow(10, 15),
+  mass: 7.35e-8,
   orbitedBy: [],
   orbiting: earth,
   ownedBy: [mcr],
+  keplerianElements: {
+    semimajorAxis: 1e-3,
+    eccentricity: 0,
+    inclination: 0,
+    longitudeOfAscendingNode: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomalyAtEpoch: 0,
+  },
 });
 const deimos = new PlanetController({
   id: "p4-2",
   name: "Deimos",
   description: "",
-  radius: 6,
+  radius: 4.01e-8,
   mass: 1.8 * Math.pow(10, 15),
   orbitedBy: [],
   orbiting: earth,
   ownedBy: [mcr],
+  keplerianElements: {
+    semimajorAxis: 0.5e-3,
+    eccentricity: 0,
+    inclination: 0,
+    longitudeOfAscendingNode: 0,
+    argumentOfPeriapsis: 0,
+    meanAnomalyAtEpoch: 0,
+  },
 });
 marsMoons.addOrbitingBodies(phobos, deimos);
 
@@ -152,7 +225,11 @@ const universe = new UniverseController({
 
 const App: FunctionComponent = () => {
   const UniverseRenderer = universe.render;
-  return <UniverseRenderer />;
+  return (
+    <div style={{ height: "100vh" }}>
+      <UniverseRenderer />
+    </div>
+  );
 };
 
 export default App;

@@ -2,8 +2,9 @@
  * General Items
  */
 
-import { Vector3 } from "@react-three/fiber";
+import { Object3DNode } from "@react-three/fiber";
 import { FunctionComponent } from "react";
+import { Vector3 } from "three";
 
 export interface Entity {
   id: string;
@@ -25,11 +26,12 @@ export interface OrbitableEntity<
 > extends Entity {
   orbitedBy: OrbitedBy[];
   renderSelf: FunctionComponent;
+  position?: Vector3;
 }
 
 export interface OrbitingEntity extends Entity, OrbitableEntity {
   orbiting: OrbitableEntity;
-  renderVisualization: FunctionComponent<{ position: Vector3 }>;
+  renderVisualization: RenderVisualization;
   keplerianElements: {
     semimajorAxis: number;
     eccentricity: number;
@@ -40,6 +42,10 @@ export interface OrbitingEntity extends Entity, OrbitableEntity {
   };
   mass: number;
 }
+
+export type RenderVisualization = React.ForwardRefExoticComponent<
+  React.RefAttributes<Object3DNode<any, any> | undefined>
+>;
 
 export interface SphericalBody {
   radius: number;

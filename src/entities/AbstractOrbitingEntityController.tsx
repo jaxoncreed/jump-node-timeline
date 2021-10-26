@@ -1,9 +1,15 @@
-import { Vector3 } from "@react-three/fiber";
+import { Object3DNode, useFrame } from "@react-three/fiber";
 import orb from "orbjs";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useMemo, useRef } from "react";
+import { Vector3, BufferGeometry } from "three";
 
 import AbstractOrbitableEntityController from "./AbstractOrbitableEntityController";
-import { excludeMethods, OrbitableEntity, OrbitingEntity } from "./entityTypes";
+import {
+  excludeMethods,
+  OrbitableEntity,
+  OrbitingEntity,
+  RenderVisualization,
+} from "./entityTypes";
 
 export default abstract class AbstractOribitingEntity
   extends AbstractOrbitableEntityController
@@ -20,6 +26,8 @@ export default abstract class AbstractOribitingEntity
     meanAnomalyAtEpoch: number;
   };
   public mass: number;
+  public position: Vector3 | undefined;
+  public stop: boolean = false;
 
   constructor(input: excludeMethods<OrbitingEntity>) {
     super(input);
@@ -29,26 +37,84 @@ export default abstract class AbstractOribitingEntity
     this.mass = input.mass;
   }
 
-  abstract renderVisualization: FunctionComponent<{ position: Vector3 }>;
+  abstract renderVisualization: RenderVisualization;
 
-  public renderSelf: FunctionComponent = () => {
-    const VisualizationComponent = this.renderVisualization;
-
+  private getCartisianCoordinates(
+    time: number,
+    differentMeanAnolaly?: number
+  ): Vector3 {
+    const meanAnomalyAtEpoch =
+      differentMeanAnolaly !== undefined
+        ? differentMeanAnolaly
+        : this.keplerianElements.meanAnomalyAtEpoch;
     const [position] = orb.position.keplerian(
       this.keplerianElements.semimajorAxis,
       this.keplerianElements.eccentricity,
-      this.keplerianElements.inclination,
-      this.keplerianElements.longitudeOfAscendingNode,
-      this.keplerianElements.argumentOfPeriapsis,
+      orb.common.deg2rad(this.keplerianElements.inclination),
+      orb.common.deg2rad(this.keplerianElements.longitudeOfAscendingNode),
+      orb.common.deg2rad(this.keplerianElements.argumentOfPeriapsis),
+      time,
       0,
-      0,
-      this.keplerianElements.meanAnomalyAtEpoch,
+      orb.common.deg2rad(meanAnomalyAtEpoch),
       (this.orbiting as OrbitingEntity).mass
         ? (this.orbiting as OrbitingEntity).mass
         : 0,
       this.mass
     );
+    const offsetVector = this.orbiting.position
+      ? this.orbiting.position
+      : new Vector3(0, 0, 0);
+    return new Vector3(...position).add(offsetVector);
+  }
 
-    return <VisualizationComponent position={position as Vector3} />;
+  private renderOrbitLine: FunctionComponent = () => {
+    const lineGeometry = useMemo<BufferGeometry>(() => {
+      const points = [];
+      for (let i = 0; i <= 360; i += 10) {
+        points.push(this.getCartisianCoordinates(0, i));
+      }
+      const geometry = new BufferGeometry().setFromPoints(points);
+      return geometry;
+    }, []);
+    return (
+      // @ts-ignore
+      <line geometry={lineGeometry}>
+        <lineBasicMaterial
+          attach="material"
+          color={"#9c88ff"}
+          linewidth={10}
+          linecap={"round"}
+          linejoin={"round"}
+        />
+      </line>
+    );
+  };
+
+  public renderSelf: FunctionComponent = () => {
+    const VisualizationComponent = this.renderVisualization;
+    const OrbitComponent = this.renderOrbitLine;
+
+    // const position = useMemo(() => {
+    //   this.position = this.getCartisianCoordinates(0);
+    //   return this.position;
+    // }, []);
+
+    const orbitingBodyRef = useRef<Object3DNode<any, any>>();
+
+    useFrame((state, delta) => {
+      // console.log(state.clock.getElapsedTime());
+      const elapsedTime = state.clock.getElapsedTime() * 60 * 60 * 24 * 30;
+      this.position = this.getCartisianCoordinates(elapsedTime);
+      if (orbitingBodyRef.current) {
+        orbitingBodyRef.current.position = this.position;
+      }
+    });
+
+    return (
+      <>
+        <OrbitComponent />
+        <VisualizationComponent ref={orbitingBodyRef} />
+      </>
+    );
   };
 }

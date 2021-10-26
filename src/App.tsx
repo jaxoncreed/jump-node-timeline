@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from "react";
+import { Vector3 } from "three";
 
 import OrbitingBarycenterController from "./entities/OrbitingBarycenterController";
 import PlanetController from "./entities/PlanetController";
@@ -38,7 +39,7 @@ const sol = new StarSystemBarycenterController({
   id: "2",
   name: "Sol",
   description: "The Solar System",
-  position: [0, 0, 0],
+  position: new Vector3(0, 0, 0),
   orbitedBy: [],
   ownedBy: [un, mcr, opa],
 });
@@ -127,12 +128,12 @@ const luna = new PlanetController({
   name: "Luna",
   description: "",
   radius: 1.16e-5,
-  mass: 7.347 * Math.pow(10, 22),
+  mass: 7.347e22,
   orbitedBy: [],
   orbiting: earth,
   ownedBy: [un],
   keplerianElements: {
-    semimajorAxis: 2.57e-3,
+    semimajorAxis: 0.2, // 2.57e-3,
     eccentricity: 0.0549,
     inclination: 5.145,
     longitudeOfAscendingNode: 28.6,
@@ -168,7 +169,7 @@ const marsMoons = new OrbitingBarycenterController({
   orbitedBy: [],
   orbiting: mars,
   keplerianElements: {
-    semimajorAxis: 2e-3,
+    semimajorAxis: 0.2, // 2e-3,
     eccentricity: 0,
     inclination: 0,
     longitudeOfAscendingNode: 0,
@@ -182,13 +183,13 @@ const phobos = new PlanetController({
   id: "p4-1",
   name: "Phobos",
   description: "",
-  radius: 11,
-  mass: 7.35e-8,
+  radius: 8.35e-8,
+  mass: 10.6e15,
   orbitedBy: [],
-  orbiting: earth,
+  orbiting: marsMoons,
   ownedBy: [mcr],
   keplerianElements: {
-    semimajorAxis: 1e-3,
+    semimajorAxis: 0.1, // 1e-3,
     eccentricity: 0,
     inclination: 0,
     longitudeOfAscendingNode: 0,
@@ -201,12 +202,12 @@ const deimos = new PlanetController({
   name: "Deimos",
   description: "",
   radius: 4.01e-8,
-  mass: 1.8 * Math.pow(10, 15),
+  mass: 1.8e15,
   orbitedBy: [],
-  orbiting: earth,
+  orbiting: marsMoons,
   ownedBy: [mcr],
   keplerianElements: {
-    semimajorAxis: 0.5e-3,
+    semimajorAxis: 0.05, // 0.5e-3,
     eccentricity: 0,
     inclination: 0,
     longitudeOfAscendingNode: 0,

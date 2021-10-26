@@ -1,5 +1,5 @@
-import { Vector3 } from "@react-three/fiber";
-import React, { FunctionComponent } from "react";
+import { Object3DNode } from "@react-three/fiber";
+import React, { forwardRef } from "react";
 
 import AbstractOribitingEntity from "./AbstractOrbitingEntityController";
 import { excludeMethods, Planet, PoliticalEntity } from "./entityTypes";
@@ -20,15 +20,14 @@ export default class PlanetController
     this.ownedBy = input.ownedBy;
   }
 
-  public renderVisualization: FunctionComponent<{ position: Vector3 }> = ({
-    position,
-  }) => {
-    console.log(this.name, position, this.radius * 100);
-    return (
-      <mesh scale={this.radius * 1000} position={position}>
-        <sphereGeometry args={[1]} />
-        <meshStandardMaterial color={"red"} />
-      </mesh>
-    );
-  };
+  public renderVisualization = forwardRef<Object3DNode<any, any> | undefined>(
+    (props, ref) => {
+      return (
+        <mesh scale={this.radius * 1000} ref={ref}>
+          <sphereGeometry args={[1]} />
+          <meshStandardMaterial color={"red"} />
+        </mesh>
+      );
+    }
+  );
 }

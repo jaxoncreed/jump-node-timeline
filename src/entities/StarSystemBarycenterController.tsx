@@ -1,5 +1,5 @@
-import { Vector3 } from "@react-three/fiber";
 import { FunctionComponent } from "react";
+import { Vector3 } from "three";
 
 import AbstractOrbitableEntityController from "./AbstractOrbitableEntityController";
 import {

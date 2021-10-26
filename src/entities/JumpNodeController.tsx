@@ -1,5 +1,4 @@
-import { Object3DNode } from "@react-three/fiber";
-import { forwardRef } from "react";
+import { FunctionComponent } from "react";
 
 import AbstractOribitingEntity from "./AbstractOrbitingEntityController";
 import { excludeMethods, JumpNode } from "./entityTypes";
@@ -20,9 +19,7 @@ export default class JumpNodeController
     this.radius = input.radius;
   }
 
-  public renderVisualization = forwardRef<Object3DNode<any, any> | undefined>(
-    (props, ref) => {
-      return null;
-    }
-  );
+  public renderVisualization: FunctionComponent = () => {
+    return null;
+  };
 }

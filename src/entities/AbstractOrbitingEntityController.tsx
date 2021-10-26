@@ -4,12 +4,7 @@ import { FunctionComponent, useMemo, useRef } from "react";
 import { Vector3, BufferGeometry } from "three";
 
 import AbstractOrbitableEntityController from "./AbstractOrbitableEntityController";
-import {
-  excludeMethods,
-  OrbitableEntity,
-  OrbitingEntity,
-  RenderVisualization,
-} from "./entityTypes";
+import { excludeMethods, OrbitableEntity, OrbitingEntity } from "./entityTypes";
 
 export default abstract class AbstractOribitingEntity
   extends AbstractOrbitableEntityController
@@ -37,7 +32,7 @@ export default abstract class AbstractOribitingEntity
     this.mass = input.mass;
   }
 
-  abstract renderVisualization: RenderVisualization;
+  abstract renderVisualization: FunctionComponent;
 
   private getCartisianCoordinates(
     time: number,
@@ -94,26 +89,28 @@ export default abstract class AbstractOribitingEntity
     const VisualizationComponent = this.renderVisualization;
     const OrbitComponent = this.renderOrbitLine;
 
-    // const position = useMemo(() => {
-    //   this.position = this.getCartisianCoordinates(0);
-    //   return this.position;
-    // }, []);
+    const position = useMemo(() => {
+      this.position = this.getCartisianCoordinates(0);
+      return this.position;
+    }, []);
 
     const orbitingBodyRef = useRef<Object3DNode<any, any>>();
 
-    useFrame((state, delta) => {
-      // console.log(state.clock.getElapsedTime());
-      const elapsedTime = state.clock.getElapsedTime() * 60 * 60 * 24 * 30;
-      this.position = this.getCartisianCoordinates(elapsedTime);
-      if (orbitingBodyRef.current) {
-        orbitingBodyRef.current.position = this.position;
-      }
-    });
+    // useFrame((state, delta) => {
+    //   // console.log(state.clock.getElapsedTime());
+    //   const elapsedTime = state.clock.getElapsedTime() * 60 * 60 * 24 * 30;
+    //   this.position = this.getCartisianCoordinates(elapsedTime);
+    //   if (orbitingBodyRef.current) {
+    //     orbitingBodyRef.current.position = this.position;
+    //   }
+    // });
 
     return (
       <>
         <OrbitComponent />
-        <VisualizationComponent ref={orbitingBodyRef} />
+        <group position={position}>
+          <VisualizationComponent />
+        </group>
       </>
     );
   };

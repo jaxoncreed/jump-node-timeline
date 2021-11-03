@@ -1,8 +1,9 @@
 import { Object3DNode, useFrame } from "@react-three/fiber";
 import orb from "orbjs";
-import { FunctionComponent, useMemo, useRef } from "react";
+import { FunctionComponent, useRef } from "react";
 import { Vector3, BufferGeometry } from "three";
 
+import { useTimeline } from "../businessLogic/timelineGlobalHook";
 import AbstractOrbitableEntityController from "./AbstractOrbitableEntityController";
 import { excludeMethods, OrbitableEntity, OrbitingEntity } from "./entityTypes";
 
@@ -59,21 +60,31 @@ export default abstract class AbstractOribitingEntity
     const offsetVector = this.orbiting.position
       ? this.orbiting.position
       : new Vector3(0, 0, 0);
+
     return new Vector3(...position).add(offsetVector);
   }
 
   private renderOrbitLine: FunctionComponent = () => {
-    const lineGeometry = useMemo<BufferGeometry>(() => {
-      const points = [];
-      for (let i = 0; i <= 360; i += 10) {
-        points.push(this.getCartisianCoordinates(0, i));
-      }
-      const geometry = new BufferGeometry().setFromPoints(points);
-      return geometry;
-    }, []);
+    const lineRef = useRef<any>();
+    const thing = useTimeline();
+    console.log(thing);
+
+    // useFrame((state, delta) => {
+    //   const elapsedTime = getCurrentUniverseTime(state.clock.getElapsedTime());
+    //   const points = [];
+    //   for (let i = 0; i <= 360; i += 10) {
+    //     points.push(this.getCartisianCoordinates(elapsedTime, i));
+    //   }
+    //   const geometry = new BufferGeometry().setFromPoints(points);
+
+    //   if (lineRef.current) {
+    //     lineRef.current.geometry = geometry;
+    //   }
+    // });
+
     return (
       // @ts-ignore
-      <line geometry={lineGeometry}>
+      <line ref={lineRef}>
         <lineBasicMaterial
           attach="material"
           color={"#9c88ff"}
@@ -89,26 +100,25 @@ export default abstract class AbstractOribitingEntity
     const VisualizationComponent = this.renderVisualization;
     const OrbitComponent = this.renderOrbitLine;
 
-    const position = useMemo(() => {
-      this.position = this.getCartisianCoordinates(0);
-      return this.position;
-    }, []);
-
     const orbitingBodyRef = useRef<Object3DNode<any, any>>();
+    // const { getCurrentUniverseTime } = useTimeline();
 
     // useFrame((state, delta) => {
-    //   // console.log(state.clock.getElapsedTime());
-    //   const elapsedTime = state.clock.getElapsedTime() * 60 * 60 * 24 * 30;
+    //   const elapsedTime = getCurrentUniverseTime(state.clock.getElapsedTime());
     //   this.position = this.getCartisianCoordinates(elapsedTime);
-    //   if (orbitingBodyRef.current) {
-    //     orbitingBodyRef.current.position = this.position;
+    //   if (orbitingBodyRef.current && orbitingBodyRef.current.position) {
+    //     (orbitingBodyRef.current.position as Vector3).set(
+    //       this.position.x,
+    //       this.position.y,
+    //       this.position.z
+    //     );
     //   }
     // });
 
     return (
       <>
         <OrbitComponent />
-        <group position={position}>
+        <group ref={orbitingBodyRef}>
           <VisualizationComponent />
         </group>
       </>

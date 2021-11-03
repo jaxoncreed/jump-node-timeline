@@ -1,12 +1,14 @@
 import React, { FunctionComponent } from "react";
 import { Vector3 } from "three";
 
+import { TimelineProvider } from "./businessLogic/timelineGlobalHook";
 import OrbitingBarycenterController from "./entities/OrbitingBarycenterController";
 import PlanetController from "./entities/PlanetController";
 import StarController from "./entities/StarController";
 import StarSystemBarycenterController from "./entities/StarSystemBarycenterController";
 import UniverseController from "./entities/UniverseController";
 import { PoliticalEntity } from "./entities/entityTypes";
+import Test from "./Test";
 
 const un: PoliticalEntity = {
   type: "PoliticalEntity",
@@ -109,7 +111,7 @@ const earth = new PlanetController({
   name: "Earth",
   description: "",
   radius: 4.26e-5,
-  mass: 5.972e24,
+  mass: 1.989e30,
   orbitedBy: [],
   orbiting: sun,
   ownedBy: [un],
@@ -148,7 +150,7 @@ const mars = new PlanetController({
   name: "Mars",
   description: "",
   radius: 2.27e-5,
-  mass: 6.39 * Math.pow(10, 23),
+  mass: 6.39e23,
   orbitedBy: [],
   orbiting: sun,
   ownedBy: [mcr],
@@ -228,7 +230,10 @@ const App: FunctionComponent = () => {
   const UniverseRenderer = universe.render;
   return (
     <div style={{ height: "100vh" }}>
-      <UniverseRenderer />
+      <TimelineProvider>
+        <UniverseRenderer />
+        <Test />
+      </TimelineProvider>
     </div>
   );
 };

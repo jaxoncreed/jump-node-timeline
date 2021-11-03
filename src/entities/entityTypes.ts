@@ -1,8 +1,6 @@
 /**
  * General Items
  */
-
-import { FunctionComponent } from "react";
 import { Vector3 } from "three";
 
 export interface Entity {
@@ -10,7 +8,6 @@ export interface Entity {
   type: string;
   name: string;
   description: string;
-  render: FunctionComponent;
 }
 
 export interface StationaryEntity<
@@ -24,13 +21,11 @@ export interface OrbitableEntity<
   OrbitedBy extends OrbitingEntity = OrbitingEntity
 > extends Entity {
   orbitedBy: OrbitedBy[];
-  renderSelf: FunctionComponent;
   position?: Vector3;
 }
 
 export interface OrbitingEntity extends Entity, OrbitableEntity {
   orbiting: OrbitableEntity;
-  renderVisualization: FunctionComponent;
   keplerianElements: {
     semimajorAxis: number;
     eccentricity: number;

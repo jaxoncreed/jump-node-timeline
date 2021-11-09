@@ -1,7 +1,7 @@
 import { Object3DNode, useFrame } from "@react-three/fiber";
 import orb from "orbjs";
 import { FunctionComponent, useRef } from "react";
-import { Vector3, BufferGeometry } from "three";
+import { Vector3 } from "three";
 
 import { useTimeline } from "../businessLogic/timelineGlobalHook";
 import AbstractOrbitableEntityController from "./AbstractOrbitableEntityController";

@@ -1,41 +1,48 @@
+import { useContextBridge, Stars } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
+import React, { FunctionComponent } from "react";
+
 import {
-  PerspectiveCamera,
-  OrbitControls,
-  useContextBridge,
-  Stars,
-} from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import React, { FunctionComponent, useRef } from "react";
-
-import Test from "../Test";
-import { TimelineContext } from "../businessLogic/timelineGlobalHook";
+  TimelineContext,
+  useTimeline,
+} from "../businessLogic/timelineGlobalHook";
 import { Universe } from "../entities/entityTypes";
+import CameraControls from "../util/CameraControls";
 import AggregateEntityRenderer from "./AggregateEntityRenderer";
+import EntityRenderer from "./EntityRenderer";
 
-const UniverseRenderer: FunctionComponent<{ data: Universe }> = ({
-  data: { entities },
-}) => {
-  console.log("Universe");
-  const camera = useRef();
+const UniverseScene: EntityRenderer<Universe> = ({ data: { entities } }) => {
+  const { curClockTimeRef } = useTimeline();
+  useFrame(({ clock }) => {
+    curClockTimeRef.current = clock.elapsedTime;
+  });
+
+  return (
+    <>
+      <Stars
+        radius={100}
+        depth={50}
+        count={5000}
+        factor={4}
+        saturation={0}
+        fade
+      />
+      <CameraControls />
+      <ambientLight intensity={0.5} />
+      {entities.map((entity) => (
+        <AggregateEntityRenderer key={entity.id} data={entity} />
+      ))}
+    </>
+  );
+};
+
+const UniverseRenderer: FunctionComponent<{ data: Universe }> = ({ data }) => {
   const ContextBridge = useContextBridge(TimelineContext);
   return (
     <>
       <Canvas style={{ backgroundColor: "black" }}>
         <ContextBridge>
-          <Stars
-            radius={100}
-            depth={50}
-            count={5000}
-            factor={4}
-            saturation={0}
-            fade
-          />
-          <PerspectiveCamera ref={camera} />
-          <OrbitControls camera={camera.current} />
-          <ambientLight intensity={0.5} />
-          {entities.map((entity) => (
-            <AggregateEntityRenderer key={entity.id} data={entity} />
-          ))}
+          <UniverseScene data={data} />
         </ContextBridge>
       </Canvas>
     </>

@@ -1,4 +1,3 @@
-import Test from "../Test";
 import EntityRenderer from "./EntityRenderer";
 import JumpNodeRenderer from "./JumpNodeRenderer";
 import OrbitingBarycenterRenderer from "./OrbitingBarycenterRenderer";
@@ -18,7 +17,6 @@ const AggregateEntityRenderer: EntityRenderer = ({
   data,
   parentPositionRef,
 }) => {
-  console.log("Aggregate");
   const Renderer = entityTypeMap[data.type];
   if (!Renderer) {
     return null;

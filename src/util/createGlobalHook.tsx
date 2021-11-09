@@ -18,9 +18,6 @@ export function createGlobalHook<ReturnValues>(useHook: () => ReturnValues): {
     return <Context.Provider value={returnValues}>{children}</Context.Provider>;
   };
 
-  // @ts-ignore
-  console.log(this);
-
   const useGlobal = () => {
     return useContext(Context);
   };

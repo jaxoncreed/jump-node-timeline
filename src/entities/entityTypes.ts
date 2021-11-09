@@ -30,13 +30,20 @@ export interface OrbitableEntity<
 export interface OrbitingEntity extends Entity, OrbitableEntity {
   orbiting: OrbitableEntity;
   keplerianElements: {
+    // Semimajor axis is AU
     semimajorAxis: number;
+    // Eccentricity in ratio
     eccentricity: number;
+    // Inclanation in deg
     inclination: number;
+    // Logitude of Acending node in deg
     longitudeOfAscendingNode: number;
+    // Argument of Pariapsis in deg
     argumentOfPeriapsis: number;
+    // Mean anomaly in deg
     meanAnomalyAtEpoch: number;
   };
+  // Mass in kg
   mass: number;
 }
 

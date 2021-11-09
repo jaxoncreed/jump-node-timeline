@@ -41,7 +41,6 @@ function timelineGlobalHookFunc(): TimelineHookReturn {
     }),
     [getCurrentUniverseTime]
   );
-  console.log(toReturn);
   return toReturn;
 }
 

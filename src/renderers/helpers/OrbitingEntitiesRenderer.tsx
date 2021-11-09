@@ -1,15 +1,21 @@
 import { useFrame } from "@react-three/fiber";
 import orb from "orbjs";
-import { FunctionComponent, useCallback, useRef } from "react";
+import {
+  FunctionComponent,
+  MutableRefObject,
+  useCallback,
+  useRef,
+} from "react";
 import { Vector3, BufferGeometry } from "three";
 
 import { useTimeline } from "../../businessLogic/timelineGlobalHook";
 import { OrbitingEntity } from "../../entities/entityTypes";
+import EntityRenderer from "../AggregateEntityRenderer";
 
 export const OrbitingEntityRenderer: FunctionComponent<{
   entity: OrbitingEntity;
-  parentPosition: Vector3;
-}> = ({ entity }) => {
+  parentPositionRef?: MutableRefObject<Vector3>;
+}> = ({ entity, parentPositionRef }) => {
   const getCartisianCoordinates = useCallback(
     (time: number, differentMeanAnolaly?: number): Vector3 => {
       const meanAnomalyAtEpoch =
@@ -30,9 +36,10 @@ export const OrbitingEntityRenderer: FunctionComponent<{
           : 0,
         entity.mass
       );
-      const offsetVector = entity.orbiting.position
-        ? entity.orbiting.position
-        : new Vector3(0, 0, 0);
+      const offsetVector =
+        parentPositionRef && parentPositionRef.current
+          ? parentPositionRef.current
+          : new Vector3(0, 0, 0);
 
       return new Vector3(...position).add(offsetVector);
     },
@@ -45,13 +52,17 @@ export const OrbitingEntityRenderer: FunctionComponent<{
       entity.keplerianElements.semimajorAxis,
       entity.mass,
       entity.orbiting,
+      parentPositionRef,
     ]
   );
 
   const lineRef = useRef<any>();
+  const orbitingBodyRef = useRef<any>();
+  const orbitalBodyPositionRef = useRef<Vector3>();
   const { getCurrentUniverseTime } = useTimeline();
 
   useFrame((state, delta) => {
+    // Set Orbit Line
     const elapsedTime = getCurrentUniverseTime(state.clock.getElapsedTime());
     const points = [];
     for (let i = 0; i <= 360; i += 10) {
@@ -61,6 +72,16 @@ export const OrbitingEntityRenderer: FunctionComponent<{
 
     if (lineRef.current) {
       lineRef.current.geometry = geometry;
+    }
+
+    // Set Oribital Body Position
+    orbitalBodyPositionRef.current = getCartisianCoordinates(elapsedTime);
+    if (orbitingBodyRef.current && orbitingBodyRef.current.position) {
+      (orbitingBodyRef.current.position as Vector3).set(
+        orbitalBodyPositionRef.current.x,
+        orbitalBodyPositionRef.current.y,
+        orbitalBodyPositionRef.current.z
+      );
     }
   });
 
@@ -76,15 +97,29 @@ export const OrbitingEntityRenderer: FunctionComponent<{
           linejoin={"round"}
         />
       </line>
+      <group ref={orbitingBodyRef}>
+        <EntityRenderer data={entity} />
+      </group>
     </>
   );
 };
 
-
-// PARENT POSITION SHOULD BE A REF (for next time)
 const OrbitingEntitiesRenderer: FunctionComponent<{
   entities: OrbitingEntity[];
-  parentPosition: Vector3;
-}> = () => {};
+  parentPositionRef?: MutableRefObject<Vector3>;
+}> = ({ entities, parentPositionRef }) => {
+  return (
+    <>
+      {entities.map((entity) => {
+        return (
+          <OrbitingEntityRenderer
+            entity={entity}
+            parentPositionRef={parentPositionRef}
+          />
+        );
+      })}
+    </>
+  );
+};
 
 export default OrbitingEntitiesRenderer;

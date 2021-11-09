@@ -1,15 +1,16 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useRef } from "react";
 
 import { StarSystemBarycenter } from "../entities/entityTypes";
-import OrbitingEntitiesRenderer from "./helpers/OrbitingEntitiesRenderer";
+import { OrbitingEntities } from "./helpers/orbitalPositionHelpers";
 
 const StarSystemBarycenterRenderer: FunctionComponent<{
   data: StarSystemBarycenter;
 }> = ({ data }) => {
+  const positionRef = useRef(data.position);
   return (
-    <OrbitingEntitiesRenderer
+    <OrbitingEntities
       entities={data.orbitedBy}
-      parentPosition={data.position}
+      parentPositionRef={positionRef}
     />
   );
 };

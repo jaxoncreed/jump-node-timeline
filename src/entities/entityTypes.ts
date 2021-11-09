@@ -1,6 +1,7 @@
 /**
  * General Items
  */
+import { FunctionComponent } from "react";
 import { Vector3 } from "three";
 
 export interface Entity {
@@ -8,6 +9,8 @@ export interface Entity {
   type: string;
   name: string;
   description: string;
+  // TODO: Remove this
+  render: FunctionComponent;
 }
 
 export interface StationaryEntity<

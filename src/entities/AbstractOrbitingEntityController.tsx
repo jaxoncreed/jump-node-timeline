@@ -101,19 +101,19 @@ export default abstract class AbstractOribitingEntity
     const OrbitComponent = this.renderOrbitLine;
 
     const orbitingBodyRef = useRef<Object3DNode<any, any>>();
-    // const { getCurrentUniverseTime } = useTimeline();
+    const { getCurrentUniverseTime } = useTimeline();
 
-    // useFrame((state, delta) => {
-    //   const elapsedTime = getCurrentUniverseTime(state.clock.getElapsedTime());
-    //   this.position = this.getCartisianCoordinates(elapsedTime);
-    //   if (orbitingBodyRef.current && orbitingBodyRef.current.position) {
-    //     (orbitingBodyRef.current.position as Vector3).set(
-    //       this.position.x,
-    //       this.position.y,
-    //       this.position.z
-    //     );
-    //   }
-    // });
+    useFrame((state, delta) => {
+      const elapsedTime = getCurrentUniverseTime(state.clock.getElapsedTime());
+      this.position = this.getCartisianCoordinates(elapsedTime);
+      if (orbitingBodyRef.current && orbitingBodyRef.current.position) {
+        (orbitingBodyRef.current.position as Vector3).set(
+          this.position.x,
+          this.position.y,
+          this.position.z
+        );
+      }
+    });
 
     return (
       <>

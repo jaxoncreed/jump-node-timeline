@@ -9,6 +9,7 @@ import StarSystemBarycenterController from "./entities/StarSystemBarycenterContr
 import UniverseController from "./entities/UniverseController";
 import { PoliticalEntity } from "./entities/entityTypes";
 import Test from "./Test";
+import UniverseRenderer from "./renderers/UniverseRenderer";
 
 const un: PoliticalEntity = {
   type: "PoliticalEntity",
@@ -227,12 +228,10 @@ const universe = new UniverseController({
 });
 
 const App: FunctionComponent = () => {
-  const UniverseRenderer = universe.render;
   return (
     <div style={{ height: "100vh" }}>
       <TimelineProvider>
-        <UniverseRenderer />
-        <Test />
+        <UniverseRenderer data={universe} />
       </TimelineProvider>
     </div>
   );

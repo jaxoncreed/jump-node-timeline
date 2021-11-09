@@ -2,10 +2,9 @@ import { FunctionComponent } from "react";
 
 import { useTimeline } from "./businessLogic/timelineGlobalHook";
 
-const Test: FunctionComponent = () => {
+const Test: FunctionComponent<{ name: string }> = ({ name }) => {
   const thing = useTimeline();
-  console.log(thing);
-  console.log(this);
+  console.log(name, thing);
 
   return null;
 };

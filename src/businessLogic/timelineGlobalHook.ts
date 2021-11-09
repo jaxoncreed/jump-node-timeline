@@ -27,7 +27,7 @@ function timelineGlobalHookFunc(): TimelineHookReturn {
         clockTimeElapsedSinceEpoch * speedMultiplier;
       const currentUniverseTime =
         universeTimeElapsedSinceEpoch + epochUniverseTime;
-      return currentUniverseTime;
+      return currentUniverseTime / 100000000000000000;
     },
     [epochClockTime, epochUniverseTime, speedMultiplier]
   );
@@ -46,5 +46,6 @@ function timelineGlobalHookFunc(): TimelineHookReturn {
 
 const timelineGlobalHook = createGlobalHook(timelineGlobalHookFunc);
 
+export const TimelineContext = timelineGlobalHook.Context;
 export const TimelineProvider = timelineGlobalHook.Provider;
 export const useTimeline = timelineGlobalHook.useGlobal;

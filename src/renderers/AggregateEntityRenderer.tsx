@@ -8,7 +8,7 @@ import StarSystemBarycenterRenderer from "./StarSystemBarycenterRenderer";
 
 const entityTypeMap: Record<string, EntityRenderer<any>> = {
   JumpNode: JumpNodeRenderer,
-  OrbitingBarrycenter: OrbitingBarycenterRenderer,
+  OrbitingBarycenter: OrbitingBarycenterRenderer,
   Planet: PlanetRenderer,
   Star: StarRenderer,
   StarSystemBarycenter: StarSystemBarycenterRenderer,
@@ -19,12 +19,11 @@ const AggregateEntityRenderer: EntityRenderer = ({
   parentPositionRef,
 }) => {
   console.log("Aggregate");
-  // const Renderer = entityTypeMap[data.type];
-  // if (!Renderer) {
-  //   return null;
-  // }
-  // return <Renderer data={data} parentPositionRef={parentPositionRef} />;
-  return null;
+  const Renderer = entityTypeMap[data.type];
+  if (!Renderer) {
+    return null;
+  }
+  return <Renderer data={data} parentPositionRef={parentPositionRef} />;
 };
 
 export default AggregateEntityRenderer;

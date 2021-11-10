@@ -27,6 +27,7 @@ function timelineGlobalHookFunc(): TimelineHookReturn {
 
   // Get the current time in the simulation
   const getCurrentUniverseTime = useCallback(
+    // Current clock time in seconds
     (currentClockTime: number) => {
       const clockTimeElapsedSinceEpoch = currentClockTime - epochClockTime;
       const universeTimeElapsedSinceEpoch =

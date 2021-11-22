@@ -22,7 +22,7 @@ function timelineGlobalHookFunc(): TimelineHookReturn {
   const [epochUniverseTime, setEpochUniverseTime] = useState<number>(0);
   // How fast the simulation is going
   const [internalSpeedMultiplier, setInternalSpeedMultiplier] =
-    useState<number>(60 * 60 * 24 * 30);
+    useState<number>(60 * 60 * 24 * 30 * 0);
   const curClockTimeRef = useRef<number>(0);
 
   // Get the current time in the simulation

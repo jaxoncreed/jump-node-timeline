@@ -3,6 +3,7 @@ import orb from "orbjs";
 import { FunctionComponent, MutableRefObject, useRef } from "react";
 import { BufferGeometry, Vector3 } from "three";
 
+import { useNav } from "../../businessLogic/navGlobalHook";
 import { useTimeline } from "../../businessLogic/timelineGlobalHook";
 import { OrbitingEntity } from "../../entities/entityTypes";
 import AggregateEntityRenderer from "../AggregateEntityRenderer";
@@ -58,6 +59,7 @@ export function useOrbitPositionRef(
 ): MutableRefObject<Vector3 | undefined> {
   const positionRef = useRef<Vector3>();
   const { getCurrentUniverseTime } = useTimeline();
+  const { focusVectorRef, focusEntityId } = useNav();
   useFrame((state, delta) => {
     const elapsedTime = getCurrentUniverseTime(state.clock.getElapsedTime());
     positionRef.current = getOrbitalBodyCartisianCoordinates(
@@ -71,6 +73,11 @@ export function useOrbitPositionRef(
         positionRef.current.y,
         positionRef.current.z
       );
+    }
+
+    // Update camera focus
+    if (focusEntityId === orbitingEntity.id) {
+      focusVectorRef.current = positionRef.current;
     }
   });
   return positionRef;

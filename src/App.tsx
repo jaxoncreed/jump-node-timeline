@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Vector3 } from "three";
 
+import { NavProvider } from "./businessLogic/navGlobalHook";
 import { TimelineProvider } from "./businessLogic/timelineGlobalHook";
 import OrbitingBarycenterController from "./entities/OrbitingBarycenterController";
 import PlanetController from "./entities/PlanetController";
@@ -10,6 +11,7 @@ import UniverseController from "./entities/UniverseController";
 import { PoliticalEntity } from "./entities/entityTypes";
 import UniverseRenderer from "./renderers/UniverseRenderer";
 import Timeline from "./ui/Timeline";
+import NavMenu from "./ui/navMenu/NavMenu";
 
 const un: PoliticalEntity = {
   type: "PoliticalEntity",
@@ -231,8 +233,11 @@ const App: FunctionComponent = () => {
   return (
     <div style={{ height: "100vh" }}>
       <TimelineProvider>
-        <UniverseRenderer data={universe} />
-        <Timeline />
+        <NavProvider>
+          <UniverseRenderer data={universe} />
+          <NavMenu data={universe} />
+          <Timeline />
+        </NavProvider>
       </TimelineProvider>
     </div>
   );

@@ -6,6 +6,7 @@ import { BufferGeometry, Vector3 } from "three";
 import { useNav } from "../../businessLogic/navGlobalHook";
 import { useTimeline } from "../../businessLogic/timelineGlobalHook";
 import { OrbitingEntity } from "../../entities/entityTypes";
+import { WORLD_LOCATION_MULTIPLIER } from "../../util/contants";
 import AggregateEntityRenderer from "../AggregateEntityRenderer";
 
 export function getOrbitalBodyCartisianCoordinates(
@@ -59,7 +60,7 @@ export function useOrbitPositionRef(
 ): MutableRefObject<Vector3 | undefined> {
   const positionRef = useRef<Vector3>();
   const { getCurrentUniverseTime } = useTimeline();
-  const { focusVectorRef, focusEntityId } = useNav();
+  const { focusVectorRef, focusEntity } = useNav();
   useFrame((state, delta) => {
     const elapsedTime = getCurrentUniverseTime(state.clock.getElapsedTime());
     positionRef.current = getOrbitalBodyCartisianCoordinates(
@@ -68,16 +69,16 @@ export function useOrbitPositionRef(
       elapsedTime
     );
     if (renderObjectRef?.current?.position) {
-      (renderObjectRef.current.position as Vector3).set(
-        positionRef.current.x,
-        positionRef.current.y,
-        positionRef.current.z
-      );
+      (renderObjectRef.current.position as Vector3)
+        .copy(positionRef.current)
+        .multiplyScalar(WORLD_LOCATION_MULTIPLIER);
     }
 
     // Update camera focus
-    if (focusEntityId === orbitingEntity.id) {
-      focusVectorRef.current = positionRef.current;
+    if (focusEntity && focusEntity.id === orbitingEntity.id) {
+      focusVectorRef.current = positionRef.current
+        .clone()
+        .multiplyScalar(WORLD_LOCATION_MULTIPLIER);
     }
   });
   return positionRef;
@@ -97,14 +98,14 @@ export const OrbitPath: FunctionComponent<{
   useFrame((state, delta) => {
     const elapsedTime = getCurrentUniverseTime(state.clock.getElapsedTime());
     const points = [];
-    for (let i = 0; i <= 360; i += 10) {
+    for (let i = 0; i <= 360; i += 1) {
       points.push(
         getOrbitalBodyCartisianCoordinates(
           orbitingEntity,
           parentPositionRef?.current,
           elapsedTime,
           i
-        )
+        ).multiplyScalar(WORLD_LOCATION_MULTIPLIER)
       );
     }
     const geometry = new BufferGeometry().setFromPoints(points);

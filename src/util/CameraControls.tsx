@@ -1,5 +1,5 @@
 import { extend, useFrame, useThree } from "@react-three/fiber";
-import { FunctionComponent, useMemo, useRef } from "react";
+import { FunctionComponent, useEffect, useMemo, useRef } from "react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import { useNav } from "../businessLogic/navGlobalHook";
@@ -13,18 +13,30 @@ const CameraControls: FunctionComponent = () => {
   // https://threejs.org/docs/#examples/en/controls/OrbitControls
   const {
     camera,
+    scene,
     gl: { domElement },
   } = useThree();
-  const { focusVectorRef } = useNav();
+  const { focusVectorRef, focusEntity } = useNav();
   // Ref to the controls, so that we can update them on every frame using useFrame
   const controls = useRef<any>();
 
   const fakeCamera = useMemo(() => {
+    camera.far = 1e1000000000000000000000;
+    scene.traverse((child) => {
+      child.frustumCulled = false;
+    });
     return camera.clone();
   }, [camera]);
+
+  // useEffect(() => {
+  //   console.log(camera.near);
+  // }, [focusEntity]);
+
   useFrame(() => {
-    // @ts-ignore
-    camera.copy(fakeCamera).position.add(focusVectorRef.current);
+    if (focusEntity) {
+      // @ts-ignore
+      camera.copy(fakeCamera).position.add(focusVectorRef.current);
+    }
     controls.current.update();
   });
 

@@ -4,11 +4,11 @@ import { useNav } from "../../businessLogic/navGlobalHook";
 import { Entity, OrbitableEntity } from "../../entities/entityTypes";
 
 const StarSystemBodyNav: FunctionComponent<{ data: Entity }> = ({ data }) => {
-  const { setFocusEntityId } = useNav();
+  const { setFocusEntity } = useNav();
 
   const onPress = useCallback(() => {
-    setFocusEntityId(data.id);
-  }, [data.id, setFocusEntityId]);
+    setFocusEntity(data);
+  }, [data, setFocusEntity]);
 
   return (
     <>

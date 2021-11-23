@@ -2,7 +2,7 @@ import { useContextBridge, Stars } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import React, { FunctionComponent } from "react";
 
-import { NavContext, useNav } from "../businessLogic/navGlobalHook";
+import { NavContext } from "../businessLogic/navGlobalHook";
 import {
   TimelineContext,
   useTimeline,
@@ -14,7 +14,6 @@ import EntityRenderer from "./EntityRenderer";
 
 const UniverseScene: EntityRenderer<Universe> = ({ data: { entities } }) => {
   const { curClockTimeRef } = useTimeline();
-  const thing = useNav();
   useFrame(({ clock }) => {
     curClockTimeRef.current = clock.elapsedTime;
   });

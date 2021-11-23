@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 
 import { Star } from "../entities/entityTypes";
+import { WORLD_LOCATION_MULTIPLIER } from "../util/contants";
 import EntityRenderer from "./EntityRenderer";
 import {
   OrbitingEntities,
@@ -15,7 +16,7 @@ const StarRenderer: EntityRenderer<Star> = ({ data, parentPositionRef }) => {
     <>
       <OrbitPath orbitingEntity={data} parentPositionRef={parentPositionRef} />
       <group ref={starRef}>
-        <mesh scale={data.radius * 10}>
+        <mesh scale={data.radius * WORLD_LOCATION_MULTIPLIER}>
           <sphereGeometry args={[1]} />
           <meshStandardMaterial color={data.color} />
         </mesh>

@@ -1,0 +1,1 @@
+export const WORLD_LOCATION_MULTIPLIER = 10;

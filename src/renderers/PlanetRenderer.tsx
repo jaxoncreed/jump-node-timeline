@@ -1,8 +1,7 @@
 import React, { useRef } from "react";
 
-import { useNav } from "../businessLogic/navGlobalHook";
 import { Planet } from "../entities/entityTypes";
-import CameraControls from "../util/CameraControls";
+import { WORLD_LOCATION_MULTIPLIER } from "../util/contants";
 import EntityRenderer from "./EntityRenderer";
 import {
   OrbitingEntities,
@@ -16,11 +15,12 @@ const PlanetRenderer: EntityRenderer<Planet> = ({
 }) => {
   const planetRef = useRef();
   const positionRef = useOrbitPositionRef(data, parentPositionRef, planetRef);
+  console.log(data.radius * WORLD_LOCATION_MULTIPLIER);
   return (
     <>
       <OrbitPath orbitingEntity={data} parentPositionRef={parentPositionRef} />
       <group ref={planetRef}>
-        <mesh scale={data.radius * 1000}>
+        <mesh scale={data.radius * WORLD_LOCATION_MULTIPLIER}>
           <sphereGeometry args={[1]} />
           <meshStandardMaterial color={"red"} />
         </mesh>
